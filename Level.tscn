@@ -1,0 +1,87 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://ball.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Enemy.gd" type="Script" id=3]
+[ext_resource path="res://Level.gd" type="Script" id=4]
+[ext_resource path="res://PoetsenOne-Regular.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://audio-bounce.ogg" type="AudioStream" id=6]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 960, 50 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 50, 540 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 40
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 40
+font_data = ExtResource( 5 )
+
+[node name="Level" type="Node2D"]
+script = ExtResource( 4 )
+
+[node name="Superior wall" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Superior wall"]
+position = Vector2( 960, -50 )
+shape = SubResource( 1 )
+
+[node name="Inferior wall" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Inferior wall"]
+position = Vector2( 960, 1130 )
+shape = SubResource( 1 )
+
+[node name="arcoplayer" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="arcoplayer"]
+position = Vector2( -50, 540 )
+shape = SubResource( 2 )
+
+[node name="arcoplayer2" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="arcoplayer2"]
+position = Vector2( 1970, 540 )
+shape = SubResource( 2 )
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 50, 460 )
+
+[node name="Enemy" parent="." instance=ExtResource( 1 )]
+position = Vector2( 1870, 460 )
+script = ExtResource( 3 )
+
+[node name="Ball" parent="." instance=ExtResource( 2 )]
+position = Vector2( 934, 533 )
+
+[node name="Audiocollision" type="AudioStreamPlayer" parent="Ball"]
+stream = ExtResource( 6 )
+
+[node name="Results_player" type="Label" parent="."]
+margin_left = -258.0
+margin_right = 1722.0
+margin_bottom = 1080.0
+custom_fonts/font = SubResource( 3 )
+text = "Results"
+align = 1
+valign = 1
+
+[node name="Results_enemy" type="Label" parent="."]
+margin_left = 628.0
+margin_top = 79.0
+margin_right = 1708.0
+margin_bottom = 999.0
+custom_fonts/font = SubResource( 4 )
+text = "Results enemy"
+align = 1
+valign = 1
+
+[node name="Restartimer" type="Timer" parent="."]
+
+[connection signal="body_entered" from="arcoplayer" to="." method="_on_arcoplayer_body_entered"]
+[connection signal="body_entered" from="arcoplayer2" to="." method="_on_arcoplayer2_body_entered"]
+[connection signal="timeout" from="Restartimer" to="Ball" method="_on_Restartimer_timeout"]
